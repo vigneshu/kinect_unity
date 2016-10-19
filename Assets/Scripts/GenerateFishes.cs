@@ -2,10 +2,12 @@ using UnityEngine;
 
 using System.Collections;
 using Windows.Kinect;
-public class Fishes : MonoBehaviour
+public class GenerateFishes : MonoBehaviour
 {
+	float gameSpaceSize;
 	GameObject sphereFish ;
 	void Start () {
+		gameSpaceSize = 6.0f - 1.0f ;
 		sphereFish = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 		sphereFish.GetComponent<Renderer>().enabled = false;
 		sphereFish.GetComponent<Collider>().enabled = false;
@@ -13,15 +15,27 @@ public class Fishes : MonoBehaviour
 		Invoke("generate",0);
 	}
 	
-	
 	void generate()
 	{
-		GameObject fish = (GameObject) Instantiate (sphereFish, new Vector3 (UnityEngine.Random.Range (-2.22f, 2.22f), UnityEngine.Random.Range (3.8f, 4.8f)), Quaternion.identity);
+		int rand1 = ((UnityEngine.Random.Range(0.0f,1.0f)>0.5)?0:1) * 2 - 1;
+		int rand2 = ((UnityEngine.Random.Range(0.0f,1.0f)>0.5)?0:1) * 2 - 1;
+		float spawnPosition = gameSpaceSize*rand1;
+		float pos1 = gameSpaceSize*rand1;
+		float pos2 = gameSpaceSize*UnityEngine.Random.Range(0.0f,1.0f);
+		Vector3 spawnPos = Vector3.zero;
+		if(UnityEngine.Random.Range(0.0f,1.0f)>0.5)
+			spawnPos = new Vector3 (pos1,pos2,0);
+		else
+			spawnPos = new Vector3 (pos2,pos1,0);
+		//GameObject fish = (GameObject) Instantiate (sphereFish, new Vector3 (spawnPosition, spawnPosition,0), Quaternion.identity);
+		GameObject fish = (GameObject) Instantiate (sphereFish,spawnPos, Quaternion.identity);
+		 fish.AddComponent<Fish>();
 		fish.GetComponent<Renderer>().enabled = true;
 		fish.GetComponent<Collider>().enabled = true;
 		Rigidbody rb = fish.AddComponent<Rigidbody>(); // Add the rigidbody.
-		rb.useGravity = false;
-		rb.velocity = new Vector3(2, 0, 0);
+		//rb.isKinematic = true;
+		//rb.velocity = new Vector3(2, 0, 0);
+		rb.velocity = -2.0f *spawnPos.normalized;
 		rb.useGravity = false;
 		//Destroy(fish, 4);
 		Invoke("generate",4);
@@ -37,9 +51,9 @@ public class Fishes : MonoBehaviour
         Gizmos.DrawSphere(p2, 0.1F);
         Gizmos.DrawSphere(p3, 0.1F);
         Gizmos.DrawSphere(p4, 0.1F);
-		Debug.Log("here");
 	}
-	
+
+		  
 	void Update()
 	{
 
