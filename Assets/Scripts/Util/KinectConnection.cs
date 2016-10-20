@@ -10,14 +10,15 @@ public class KinectConnection : MonoBehaviour {
     private BodySourceManager BodyManager;
     private Body[] bodies;
 	Vector3 pos;
-	public bool isVirtual = false;
+	public bool isVirtual;
 	private float zPos = 1.4f;
 	WorkspaceCalibration CalibrationObject = null;
 	// Use this for initialization
 	void Start () {
 		DontDestroyOnLoad(this.gameObject);
+		
 		CalibrationObject = new WorkspaceCalibration(this.GetComponent<KinectConnection>());
-        Debug.Log("startt");
+        Debug.Log("isVirtual "+isVirtual);
 		pos = Vector3.zero;
         if (BodySrcManager == null)
         {
@@ -25,6 +26,7 @@ public class KinectConnection : MonoBehaviour {
         }
         else
         {
+			DontDestroyOnLoad(BodySrcManager);
             BodyManager = BodySrcManager.GetComponent<BodySourceManager>();
         }
 	}

@@ -1,0 +1,4 @@
+>reduce the gamespace box size player etc so that playerCube doesnt wobble after workspace calibration
+>graspable fingers
+>detect two hands
+> remove color manager, body manager color view from game scene and add it in workspace calib scene and change it to dontdestroy onload

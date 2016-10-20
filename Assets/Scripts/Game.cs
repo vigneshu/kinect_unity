@@ -10,7 +10,12 @@ public class Game : MonoBehaviour
     void Start()
     {
         conn = GameObject.Find("KinnectConnection").GetComponent<KinectConnection>();
-		scoreText = GameObject.Find ("ScoreText").GetComponent<Text>();
+		try{
+			scoreText = GameObject.Find ("ScoreText").GetComponent<Text>();
+		}
+		catch{
+			Debug.Log("No score text found");
+		}
     }
 
     // Update is called once per frame
