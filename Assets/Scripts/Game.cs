@@ -6,10 +6,13 @@ public class Game : MonoBehaviour
 {
     KinectConnection conn;
 	private Text scoreText;
+	GameObject PlayerLeftWrist;
 	int score = 0;
     void Start()
     {
         conn = GameObject.Find("KinnectConnection").GetComponent<KinectConnection>();
+		PlayerLeftWrist = GameObject.Find("PlayerLeftWrist");
+		
 		try{
 			scoreText = GameObject.Find ("ScoreText").GetComponent<Text>();
 		}
@@ -21,7 +24,9 @@ public class Game : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        gameObject.transform.position = conn.GetRightWristPosition();
+        //gameObject.transform.position = conn.GetRightWristPosition();
+		gameObject.transform.position = conn.GetJointPosition(JointType.WristRight);
+		PlayerLeftWrist.transform.position = conn.GetJointPosition(JointType.WristLeft);
 		
     }
 	void OnCollisionEnter (Collision collision)

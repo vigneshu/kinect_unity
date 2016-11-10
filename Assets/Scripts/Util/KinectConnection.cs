@@ -30,6 +30,37 @@ public class KinectConnection : MonoBehaviour {
             BodyManager = BodySrcManager.GetComponent<BodySourceManager>();
         }
 	}
+    public Vector3 GetJointPosition(JointType joint)
+    {
+        if(!isVirtual)
+		{
+			if (BodyManager == null)
+				return pos;
+			bodies = BodyManager.GetData();
+			if (bodies == null)
+				return pos;
+			foreach (var body in bodies)
+			{
+
+				if (body == null)
+				{
+					Debug.Log("null");
+					continue;
+
+				}
+
+				if (body.IsTracked)
+				{
+
+					var pos_temp = body.Joints[joint].Position;
+					pos = new Vector3(pos_temp.X, pos_temp.Y, pos_temp.Z);
+				}
+			}
+		}
+		pos -= CalibrationObject.offset;
+		pos = Vector3.Scale(pos, CalibrationObject.scale);
+        return pos;
+    }	
     public Vector3 GetRightWristPosition()
     {
         if(!isVirtual)
@@ -48,6 +79,7 @@ public class KinectConnection : MonoBehaviour {
 					continue;
 
 				}
+
 				if (body.IsTracked)
 				{
 
@@ -75,7 +107,8 @@ public class KinectConnection : MonoBehaviour {
 		//If calibration
 		if (CalibrationObject.CalibrationStarted && !CalibrationObject.CalibrationEnded)
         {
-			CalibrationObject.UpdateWorkSpaceLimits(GetRightWristPosition());
+		//	CalibrationObject.UpdateWorkSpaceLimits(GetRightWristPosition());
+			CalibrationObject.UpdateWorkSpaceLimits(GetJointPosition(JointType.WristRight));
         }
 	}
 	public void ChangeScene()
